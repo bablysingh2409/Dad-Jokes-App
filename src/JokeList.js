@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Joke from './Joke';
+import { v4 as uuidv4 } from 'uuid';
 
 class JokeList extends Component {
   static defaultProps = {
@@ -8,23 +9,40 @@ class JokeList extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { jokes: [], id: '' };
+    this.state = { jokes: [] };
+    // this.handleVotes = this.handleVotes.bind(this);
   }
   async componentDidMount() {
-    const jokes = [];
-    while (jokes.length < this.props.numJokesToGet) {
+    let jokesContainer = [];
+    for (let i = 0; i < this.props.numJokesToGet; i++) {
       let response = await axios.get('https://icanhazdadjoke.com/', {
         headers: { Accept: 'application/json' },
       });
-      jokes.push(response.data.Joke);
+      jokesContainer.push({ id: uuidv4(), text: response.data.joke, votes: 0 });
     }
+
+    this.setState({ jokes: jokesContainer });
+  }
+  handleVotes(id, delta) {
+    this.setState((st) => ({
+      jokes: st.jokes.map((j) => (j.id === id ? { ...j, votes: j.votes + delta } : j)),
+    }));
   }
   render() {
-    const showJokes = this.state.jokes.map((j) => <Joke joke={j} />);
+    const jokes = this.state.jokes.map((j) => (
+      <Joke
+        joke={j.text}
+        key={j.id}
+        votes={j.votes}
+        upvote={() => this.handleVotes(j.id, 1)}
+        downvote={() => this.handleVotes(j.id, -1)}
+      />
+    ));
     return (
       <div>
         <h1>Dad Jokes</h1>
-        <ul>{showJokes}</ul>
+        <div>{jokes}</div>
+        {this.state.votes}
       </div>
     );
   }
