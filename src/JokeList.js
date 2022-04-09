@@ -10,7 +10,9 @@ class JokeList extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { jokes: JSON.parse(window.localStorage.getItem('jokes')) || [] };
+    this.state = { jokes: JSON.parse(window.localStorage.getItem('jokes')) || [], loader: false };
+    this.seenJokes = new Set(this.state.jokes.map((j) => j.text));
+    console.log(this.seenJokes);
     this.handleClicks = this.handleClicks.bind(this);
   }
   componentDidMount() {
@@ -20,18 +22,29 @@ class JokeList extends Component {
   }
   async getJokes() {
     let jokesContainer = [];
-    while (jokesContainer.length < this.props.numJokesToGet) {
-      let response = await axios.get('https://icanhazdadjoke.com/', {
-        headers: { Accept: 'application/json' },
-      });
-      jokesContainer.push({ id: uuidv4(), text: response.data.joke, votes: 0 });
+    try {
+      while (jokesContainer.length < this.props.numJokesToGet) {
+        let response = await axios.get('https://icanhazdadjoke.com/', {
+          headers: { Accept: 'application/json' },
+        });
+        let newJokes = response.data.joke;
+        if (!this.seenJokes.has(newJokes)) {
+          jokesContainer.push({ id: uuidv4(), text: newJokes, votes: 0 });
+        } else {
+          console.log(newJokes);
+        }
+      }
+      this.setState(
+        (st) => ({
+          loader: false,
+          jokes: [...st.jokes, ...jokesContainer],
+        }),
+        () => window.localStorage.setItem('jokes', JSON.stringify(this.state.jokes))
+      );
+    } catch (err) {
+      alert(err);
+      this.setState({ loader: false });
     }
-    this.setState(
-      (st) => ({
-        jokes: [...st.jokes, ...jokesContainer],
-      }),
-      () => window.localStorage.setItem('jokes', JSON.stringify(this.state.jokes))
-    );
   }
 
   handleVotes(id, delta) {
@@ -44,9 +57,20 @@ class JokeList extends Component {
   }
 
   handleClicks() {
-    this.getJokes();
+    this.setState({ loader: true }, this.getJokes);
   }
   render() {
+    if (this.state.loader) {
+      return (
+        <div className="JokeList-spinner">
+          <img
+            src="https://icons8.com/preloaders/preloaders/116/Happy.gif"
+            className="JokeList-smiley"
+          />
+          <h1 className="JokeList-title">Loading.....</h1>
+        </div>
+      );
+    }
     const jokes = this.state.jokes.map((j) => (
       <Joke
         text={j.text}

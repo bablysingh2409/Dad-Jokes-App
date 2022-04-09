@@ -43,3 +43,14 @@
     overflow: scroll;
     box-shadow: 5px 5px 8px 5px #333336;
 }
+
+.JokeList-spinner{
+    text-align: center;
+    color: white;
+}
+
+.JokeList-spinner img{
+width: 100px;
+}
+
+    
