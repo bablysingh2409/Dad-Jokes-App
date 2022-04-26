@@ -71,15 +71,7 @@ class JokeList extends Component {
         </div>
       );
     }
-    const jokes = this.state.jokes.map((j) => (
-      <Joke
-        text={j.text}
-        key={j.id}
-        votes={j.votes}
-        upvote={() => this.handleVotes(j.id, 1)}
-        downvote={() => this.handleVotes(j.id, -1)}
-      />
-    ));
+    const jokes = this.state.jokes.sort((a, b) => b.votes - a.votes);
     return (
       <div className="JokeList">
         <div className="JokeList-sidebar">
@@ -92,7 +84,15 @@ class JokeList extends Component {
           </button>
         </div>
         <div className="JokeList-joke">
-          {jokes}
+          {jokes.map((j) => (
+            <Joke
+              text={j.text}
+              key={j.id}
+              votes={j.votes}
+              upvote={() => this.handleVotes(j.id, 1)}
+              downvote={() => this.handleVotes(j.id, -1)}
+            />
+          ))}
           {this.state.votes}
         </div>
       </div>

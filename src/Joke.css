@@ -38,6 +38,47 @@
     font-size: 1.5rem;
     margin: 10px;
     cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upvote:hover{
+    animation-name:move-up ;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-in-out;
+    color: green;
+}
+
+
+@keyframes move-up {
+    0%,
+    50%,
+    100%{
+        transform: translateY(0);
+    }
+    25%,
+    100%{
+        transform: translateY(-3px);
+    }
+}
+
+.downvote:hover{
+    animation-name:move-down ;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-in-out;
+    color: red;
+}
+
+
+@keyframes move-down {
+    0%,
+    50%,
+    100%{
+        transform: translateY(0);
+    }
+    25%,
+    100%{
+        transform: translateY(3px);
+    }
 }
 
 .Joke-smiley{
@@ -47,3 +88,29 @@
     box-shadow: 2px 2px 5px 2px #2a2c4a;
 
 }
+
+.Joke-smiley:hover{
+    animation-name: spin;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+}
+
+@keyframes spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    30%{
+        transform: rotate(20deg);
+    }
+    60%{
+        transform: rotate(0deg);
+    }
+    80%{
+        transform: rotate(10deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
+}
+

@@ -35,6 +35,14 @@
 
 }
 
+.JokeList-sidebar img:hover{
+    animation-name:tilt-n-move-shaking ;
+    animation-duration: 5s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    
+}
+
 .JokeList-joke{
     height: 90%;
     background: white;
@@ -53,4 +61,33 @@
 width: 100px;
 }
 
-    
+.JokeList-getmore{
+    font-size: 1.5rem;
+    width: 50%;
+    border-radius: 2rem;
+    padding: 1rem ;
+    color: white;
+    font-weight: 700;
+    border: none;
+    outline: none;
+    margin: 1.2rem;
+    cursor: pointer;
+    transition: 0.8s ease;
+    background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
+    box-shadow: 5px 5px 8px 5px #333336;
+
+}
+
+.JokeList-getmore:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+@keyframes tilt-n-move-shaking {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(5px, 5px) rotate(5deg); }
+    50% { transform: translate(0, 0) rotate(0eg); }
+    75% { transform: translate(-5px, 5px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+ 
